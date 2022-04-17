@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require("express");
 
-const join = require('../controllers/join');
-const { authToken, setAuthHeaders } = require('../utils/token');
+const join = require("../controllers/join");
+// const { authToken, setAuthHeaders } = require("../utils/token");
 
 const router = express.Router();
 
-router.post('/', join);
+router.post("/", join);
 
 module.exports = router;

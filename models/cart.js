@@ -6,17 +6,16 @@ const cartSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    items: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-        },
-      },
-    ],
-    total: Number,
+    cart: {
+      type: Array,
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+const Cart = mongoose.model("Cart", cartSchema);
+
+module.exports = Cart;

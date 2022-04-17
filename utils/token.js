@@ -3,16 +3,25 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const authToken = (req, res, next) => {
-  const token = req.header("Authorization");
-  if (!token) return res.status(401).send("Access denied. No token provided.");
+  // const token = req.header("Authorization");
+  const cookieToken = req.headers.cookie;
+  if (!cookieToken) {
+    return res.status(401).json({
+      message: "Unauthorized, please login",
+    });
+  }
+
+  const token = cookieToken.split("=")[1];
 
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
     req.user = verified;
-    req.jwt = token;
+    // req.jwt = token;
     next();
   } catch (err) {
-    res.status(400).send("Invalid token.");
+    res.status(400).json({
+      message: "Invalid token \nKindly login again",
+    });
   }
 };
 
@@ -27,15 +36,15 @@ const generateToken = (user) => {
   return jwt.sign(payload, process.env.TOKEN_SECRET, options);
 };
 
-const setAuthHeaders = (res, req, next) => {
-  res.set("Authorization", req.jwt);
-  res.set("Access-Control-Expose-Headers", "Authorization");
+// const setAuthHeaders = (res, req, next) => {
+//   res.set("Authorization", req.jwt);
+//   res.set("Access-Control-Expose-Headers", "Authorization");
 
-  next();
-};
+//   next();
+// };
 
 module.exports = {
   authToken,
   generateToken,
-  setAuthHeaders,
+  // setAuthHeaders,
 };
